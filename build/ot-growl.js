@@ -1,10 +1,10 @@
 /**
- * angular-growl-v2 - v0.7.9 - 2015-10-29
- * http://janstevens.github.io/angular-growl-2
- * Copyright (c) 2015 Marco Rinck,Jan Stevens,Silvan van Leeuwen; Licensed MIT
+ * ot-growl - v0.0.1 - 2015-10-29
+ * 
+ * Copyright (c) 2015 Marco Rinck,Jan Stevens,Silvan van Leeuwen,Cezar Pretto; Licensed MIT
  */
 angular.module('ot-growl', []);
-angular.module('ot-growl').directive('growl', [function () {
+angular.module('ot-growl').directive('otGrowl', [function () {
     'use strict';
     return {
       restrict: 'A',

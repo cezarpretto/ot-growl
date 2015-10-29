@@ -1,4 +1,4 @@
-angular.module("ot-growl").directive("growl", [
+angular.module("ot-growl").directive("otGrowl", [
   function () {
     "use strict";
 

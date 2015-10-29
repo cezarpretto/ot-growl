@@ -20,6 +20,7 @@
         growl.success('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         growl.info('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         growl.error('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
+        growl.warning('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         var vm = this;
         vm.message = {type: 'success', ttl: -1};
         vm.showMessage = showMessage;
