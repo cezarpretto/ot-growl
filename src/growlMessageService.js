@@ -99,7 +99,9 @@ angular.module("ot-growl").service("growlMessages", ['$sce', '$interval', '$http
     }
 
     message.text = $sce.trustAsHtml(String(message.text));
-    message.details.detail = $sce.trustAsHtml(String(message.details.detail));
+    if(message.details !== undefined){
+      message.details.detail = $sce.trustAsHtml(String(message.details.detail));
+    }
 
     /**If message closes on timeout, add's promises array for
      timeouts to stop close. Also sets message.closeoutTimer to ttl / 1000

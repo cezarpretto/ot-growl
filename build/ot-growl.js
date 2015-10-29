@@ -385,7 +385,9 @@ angular.module('ot-growl').service('growlMessages', [
         }
       }
       message.text = $sce.trustAsHtml(String(message.text));
-      message.details.detail = $sce.trustAsHtml(String(message.details.detail));
+      if (message.details !== undefined) {
+        message.details.detail = $sce.trustAsHtml(String(message.details.detail));
+      }
       if (message.ttl && message.ttl !== -1) {
         message.countdown = message.ttl / 1000;
         message.promises = [];

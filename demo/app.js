@@ -17,7 +17,7 @@
     //// Sample controller here.
     GrowlSampleController.$inject = ['growl'];
     function GrowlSampleController (growl) {
-        growl.success('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
+        growl.success('Teste', {ttl: -1}, {detail: 'Xml\'s importadas: 5 <br> Xml\'s com erro: 50'});
         growl.info('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         growl.error('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         growl.warning('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
