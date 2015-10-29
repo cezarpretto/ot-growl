@@ -1,5 +1,5 @@
 /**
- * ot-growl - v0.0.1 - 2015-10-29
+ * ot-growl - v0.0.2 - 2015-10-29
  * 
  * Copyright (c) 2015 Marco Rinck,Jan Stevens,Silvan van Leeuwen,Cezar Pretto; Licensed MIT
  */
@@ -242,6 +242,7 @@ angular.module('ot-growl').provider('growl', function () {
           onclose: _config.onclose,
           onopen: _config.onopen,
           details: details,
+          detailsCopy: angular.copy(details),
           showDetails: false,
           projectId: _projectId,
           accessToken: _accessToken
@@ -443,18 +444,20 @@ angular.module('ot-growl').service('growlMessages', [
       }
     };
     this.sendReport = function (message) {
-      console.log(message);
-      var report = {
-          id: message.projectId,
-          title: message.textCopy,
-          description: message.details.detail,
-          labels: 'REPORT AUTOMATICO'
-        };
-      $http.post('http://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function (data) {
-        console.log('Report sent succesfuly!');
-      }).error(function (err) {
-        console.error(err);
-      });
+      if (message.accessToken !== '' && message.projectId !== 0) {
+        console.log(message);
+        var report = {
+            id: message.projectId,
+            title: message.textCopy,
+            description: message.detailsCopy.detail,
+            labels: 'REPORT AUTOMATICO'
+          };
+        $http.post('https://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function (data) {
+          console.log('Report sent succesfuly!');
+        }).error(function (err) {
+          console.error(err);
+        });
+      }
     };
   }
 ]);

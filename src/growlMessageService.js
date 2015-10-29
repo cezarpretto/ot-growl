@@ -175,17 +175,19 @@ angular.module("ot-growl").service("growlMessages", ['$sce', '$interval', '$http
   };
 
   this.sendReport = function(message){
-    console.log(message);
-    var report = {
-      id: message.projectId,
-      title: message.textCopy,
-      description: message.details.detail,
-      labels: 'REPORT AUTOMATICO'
-    };
-    $http.post('http://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function(data){
-      console.log('Report sent succesfuly!');
-    }).error(function(err){
-      console.error(err);
-    });
+    if(message.accessToken !== '' && message.projectId !== 0){
+      console.log(message);
+      var report = {
+        id: message.projectId,
+        title: message.textCopy,
+        description: message.detailsCopy.detail,
+        labels: 'REPORT AUTOMATICO'
+      };
+      $http.post('https://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function(data){
+        console.log('Report sent succesfuly!');
+      }).error(function(err){
+        console.error(err);
+      });
+    }
   };
 }]);

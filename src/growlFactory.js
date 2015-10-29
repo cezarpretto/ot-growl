@@ -263,6 +263,7 @@ angular.module("ot-growl").provider("growl", function () {
         onclose: _config.onclose,
         onopen: _config.onopen,
         details: details,
+        detailsCopy: angular.copy(details),
         showDetails: false,
         projectId: _projectId,
         accessToken: _accessToken
