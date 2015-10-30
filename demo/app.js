@@ -2,9 +2,10 @@
     'use strict';
 
     angular.module('GrowlSample', ['ot-growl'])
-        .config(['growlProvider', function(growlProvider) {
-          growlProvider.globalProjectId(483444);
-          growlProvider.globalAccessToken('ETjVsxduvBsaU1mGwqfZ');
+        .config(['otGrowlProvider', function(otGrowlProvider) {
+          otGrowlProvider.globalProjectId(483444);
+          otGrowlProvider.globalAccessToken('ETjVsxduvBsaU1mGwqfZ');
+          otGrowlProvider.globalInProduction(false);
         }])
         .config(['$httpProvider', function($httpProvider) {
             $httpProvider.defaults.useXDomain = true;
@@ -15,12 +16,12 @@
 
 
     //// Sample controller here.
-    GrowlSampleController.$inject = ['growl'];
-    function GrowlSampleController (growl) {
-        growl.success('Teste', {ttl: -1}, {detail: 'Xml\'s importadas: 5 <br> Xml\'s com erro: 50'});
-        growl.info('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
-        growl.error('Ocorreu um erro na hora de importar as xmls', {ttl: -1}, {detail: 'Xml\'s importadas: 5 <br> Xml\'s com erro: 50'});
-        growl.warning('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
+    GrowlSampleController.$inject = ['otGrowl'];
+    function GrowlSampleController (otGrowl) {
+        otGrowl.success('Teste', {ttl: -1}, {detail: 'Xml\'s importadas: 5 <br> Xml\'s com erro: 50'});
+        otGrowl.info('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
+        otGrowl.error('Ocorreu um erro na hora de importar as xmls', {ttl: -1}, {detail: 'Xml\'s importadas: 5 <br> Xml\'s com erro: 50'});
+        otGrowl.warning('Teste', {ttl: -1}, {detail: '<h1>Teste</h1>'});
         var vm = this;
         vm.message = {type: 'success', ttl: -1};
         vm.showMessage = showMessage;

@@ -1,5 +1,5 @@
 /**
- * ot-growl - v0.0.2 - 2015-10-29
+ * ot-growl - v0.0.2 - 2015-10-30
  * 
  * Copyright (c) 2015 Marco Rinck,Jan Stevens,Silvan van Leeuwen,Cezar Pretto; Licensed MIT
  */
@@ -18,13 +18,13 @@ angular.module('ot-growl').directive('otGrowl', [function () {
       controller: [
         '$scope',
         '$interval',
-        'growl',
+        'otGrowl',
         'growlMessages',
-        function ($scope, $interval, growl, growlMessages) {
+        function ($scope, $interval, otGrowl, growlMessages) {
           $scope.referenceId = $scope.reference || 0;
           growlMessages.initDirective($scope.referenceId, $scope.limitMessages);
           $scope.growlMessages = growlMessages;
-          $scope.inlineMessage = angular.isDefined($scope.inline) ? $scope.inline : growl.inlineMessages();
+          $scope.inlineMessage = angular.isDefined($scope.inline) ? $scope.inline : otGrowl.inlineMessages();
           $scope.$watch('limitMessages', function (limitMessages) {
             var directive = growlMessages.directives[$scope.referenceId];
             if (!angular.isUndefined(limitMessages) && !angular.isUndefined(directive)) {
@@ -55,7 +55,7 @@ angular.module('ot-growl').directive('otGrowl', [function () {
           $scope.wrapperClasses = function () {
             var classes = {};
             classes['growl-fixed'] = !$scope.inlineMessage;
-            classes[growl.position()] = true;
+            classes[otGrowl.position()] = true;
             return classes;
           };
           $scope.computeTitle = function (message) {
@@ -80,14 +80,14 @@ angular.module('ot-growl').run([
     }
   }
 ]);
-angular.module('ot-growl').provider('growl', function () {
+angular.module('ot-growl').provider('otGrowl', function () {
   'use strict';
   var _ttl = {
       success: null,
       error: null,
       warning: null,
       info: null
-    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true, _projectId = 0, _accessToken = '';
+    }, _messagesKey = 'messages', _messageTextKey = 'text', _messageTitleKey = 'title', _messageSeverityKey = 'severity', _messageTTLKey = 'ttl', _onlyUniqueMessages = true, _messageVariableKey = 'variables', _referenceId = 0, _inline = false, _position = 'top-right', _disableCloseButton = false, _disableIcons = false, _reverseOrder = false, _disableCountDown = false, _translateMessages = true, _projectId = 0, _accessToken = '', _inProduction = true;
   this.globalTimeToLive = function (ttl) {
     if (typeof ttl === 'object') {
       for (var k in ttl) {
@@ -138,6 +138,10 @@ angular.module('ot-growl').provider('growl', function () {
   };
   this.globalAccessToken = function (accessToken) {
     _accessToken = accessToken;
+    return this;
+  };
+  this.globalInProduction = function (inProduction) {
+    _inProduction = inProduction;
     return this;
   };
   this.globalPosition = function (position) {
@@ -245,7 +249,8 @@ angular.module('ot-growl').provider('growl', function () {
           detailsCopy: angular.copy(details),
           showDetails: false,
           projectId: _projectId,
-          accessToken: _accessToken
+          accessToken: _accessToken,
+          inProduction: _inProduction
         };
         return broadcastMessage(message);
       }
@@ -444,19 +449,21 @@ angular.module('ot-growl').service('growlMessages', [
       }
     };
     this.sendReport = function (message) {
-      if (message.accessToken !== '' && message.projectId !== 0) {
-        console.log(message);
-        var report = {
-            id: message.projectId,
-            title: message.textCopy,
-            description: message.detailsCopy.detail,
-            labels: 'REPORT AUTOMATICO'
-          };
-        $http.post('https://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function (data) {
-          console.log('Report sent succesfuly!');
-        }).error(function (err) {
-          console.error(err);
-        });
+      if (message.inProduction) {
+        if (message.accessToken !== '' && message.projectId !== 0) {
+          console.log(message);
+          var report = {
+              id: message.projectId,
+              title: message.textCopy,
+              description: message.detailsCopy.detail,
+              labels: 'REPORT AUTOMATICO'
+            };
+          $http.post('https://gitlab.com/api/v3/projects/' + message.projectId + '/issues?private_token=' + message.accessToken, report).success(function () {
+            console.log('Report sent succesfuly!');
+          }).error(function (err) {
+            console.error(err);
+          });
+        }
       }
     };
   }

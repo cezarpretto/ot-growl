@@ -1,4 +1,4 @@
-angular.module("ot-growl").provider("growl", function () {
+angular.module("ot-growl").provider("otGrowl", function () {
   "use strict";
 
   var _ttl = {success: null, error: null, warning: null, info: null},
@@ -18,7 +18,8 @@ angular.module("ot-growl").provider("growl", function () {
     _disableCountDown = false,
     _translateMessages = true,
     _projectId = 0,
-    _accessToken = '';
+    _accessToken = '',
+    _inProduction = true;
 
   /**
    * set a global timeout (time to live) after which messages will be automatically closed
@@ -119,6 +120,11 @@ angular.module("ot-growl").provider("growl", function () {
 
   this.globalAccessToken = function(accessToken){
     _accessToken = accessToken;
+    return this;
+  };
+
+  this.globalInProduction = function(inProduction){
+    _inProduction = inProduction;
     return this;
   };
 
@@ -266,7 +272,8 @@ angular.module("ot-growl").provider("growl", function () {
         detailsCopy: angular.copy(details),
         showDetails: false,
         projectId: _projectId,
-        accessToken: _accessToken
+        accessToken: _accessToken,
+        inProduction: _inProduction
       };
 
       return broadcastMessage(message);

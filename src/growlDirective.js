@@ -11,13 +11,13 @@ angular.module("ot-growl").directive("otGrowl", [
         inline: '=',
         limitMessages: '='
       },
-      controller: ['$scope', '$interval', 'growl', 'growlMessages',
-        function ($scope, $interval, growl, growlMessages) {
+      controller: ['$scope', '$interval', 'otGrowl', 'growlMessages',
+        function ($scope, $interval, otGrowl, growlMessages) {
           $scope.referenceId = $scope.reference || 0;
 
           growlMessages.initDirective($scope.referenceId, $scope.limitMessages);
           $scope.growlMessages = growlMessages;
-          $scope.inlineMessage = angular.isDefined($scope.inline) ? $scope.inline : growl.inlineMessages();
+          $scope.inlineMessage = angular.isDefined($scope.inline) ? $scope.inline : otGrowl.inlineMessages();
 
           $scope.$watch('limitMessages', function (limitMessages) {
             var directive = growlMessages.directives[$scope.referenceId];
@@ -59,7 +59,7 @@ angular.module("ot-growl").directive("otGrowl", [
           $scope.wrapperClasses = function () {
             var classes = {};
             classes['growl-fixed'] = !$scope.inlineMessage;
-            classes[growl.position()] = true;
+            classes[otGrowl.position()] = true;
             return classes;
           };
 
